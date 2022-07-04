@@ -1,3 +1,4 @@
+
 ﻿function Search-Log {
 
 <# 
