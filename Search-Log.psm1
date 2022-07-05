@@ -1,30 +1,22 @@
-
-﻿function Search-Log {
-
-<# 
-
-.SYNTAX
-Search-Log
-    [-LogPath <String>]
-    [-SearchString <String>]
-
+<#
 .DESCRIPTION
 This cmdlet searches through all folders within the provided log path and returns any log files that include the string provided.
-
+.PARAMETER LogPath
+Identifies the directory where the log files are stored.
+.PARAMETER SearchString
+Searches all log files in LogPath for the provided string.
 .EXAMPLE
 Search-Log -LogPath "C:\Users\TestUser\Documents\LogFolder" -SearchString "Error Message"
-
-
-FunctionName  : Search-Log
+.NOTES
+Module Name  : Search-Log
 Created By    : Ross Hight
 Date Coded    : 07/03/2022 23:50:00
 #>
-
-
-
+function Search-Log {
+	
 param(
-    [Parameter(mandatory= $true)][string] $LogPath,
-    [Parameter(mandatory= $true)][string] $SearchString
+    [Parameter(mandatory= $true)][string] $LogPath, #Identifies the directory where the log files are stored.
+    [Parameter(mandatory= $true)][string] $SearchString #Searches all log files in LogPath for the provided string.
     )
 
 $count = 0
@@ -52,3 +44,5 @@ write-host "END OF SEARCH."($count)"RESULTS FOUND."  -fore yellow
 write-host " "
 
 }
+
+Export-ModuleMember -Function 'Search-Log'
