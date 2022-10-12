@@ -1,10 +1,15 @@
-$case = read-host "Enter the last 4 of the case number"
-$path = "C:\Users\ross.hight\Documents\Customer Files\/$case" 
+$path = read-host "Please enter the location where the ZIP files are located" 
+
+#Create temporary drive to shorten the filepath and avoid "Path Too Long" errors
+subst q: $path
+$shortpath = "q:\"
+
+#Get the total number of items to be processed for calculating job completion percentage
 $count = (Get-ChildItem -Path $path -Recurse -Filter *.zip -Exclude LogArchive*  | Measure-Object).count
 $progress = 0
 write-host ""
 
-Get-ChildItem -Path $path -Recurse -Filter *.zip -Exclude LogArchive* | ForEach-Object {
+Get-ChildItem -Path $shortpath -Recurse -Filter *.zip -Exclude LogArchive* | ForEach-Object {
 	$n=($_.Fullname.trimend('.zip'));
 	if (test-path -path $n){
 		$progress = $progress + 1
@@ -21,3 +26,15 @@ Get-ChildItem -Path $path -Recurse -Filter *.zip -Exclude LogArchive* | ForEach-
 }
 write-host "FILE EXTRACTION COMPLETE" -fore yellow
 write-host ""
+
+$choice = read-host "Would you like to open the folder location (y/n)"
+if($choice -eq 'y'){
+	Invoke-Item $path
+	#Remove temporary drive
+	subst q: /d
+	Exit
+} else {
+	#Remove temporary drive
+	subst q: /d
+	Exit
+}

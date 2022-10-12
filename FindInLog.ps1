@@ -1,10 +1,8 @@
-#Change the prompt text here to match the folder naming that you use for each customer's logs.  For example, I use the last 4 characters of the case number.
-$case = read-host "Enter the last 4 digits of the case number"
-$Searchstring = read-host "Enter the string to search for"
-$count = 1
-#Change $path to the directory where you keep your customer logs
-$path = "C:\Users\ross.hight\Documents\Customer Files\/$case"
+$Searchstring = read-host "Please enter the string to search for"
+$path =  Read-Host "Please enter the path where the logs are located"
 $Logs = Get-ChildItem -path $path -recurse -include *.log
+$results = @()
+$count = 1
 
 foreach($Log in $Logs)  
 {  
@@ -13,6 +11,7 @@ foreach($Log in $Logs)
     {  
 	write-host " "
        write-host "**" $count "**"
+	$results += $log.fullname
 	$parentPath = split-path -Path $log.fullname
 	$superParentPath = split-path -Path $parentPath
 	$leaf = Split-Path $Log -Leaf
@@ -27,3 +26,10 @@ foreach($Log in $Logs)
 
 write-host "END OF SEARCH."($count-1)"RESULTS FOUND."  -fore yellow
 write-host " "
+
+$choice = read-host "Would you like to open these log files now? (y/n)"
+
+if($choice -eq 'y'){
+	$results | ForEach-Object {invoke-item -Path $_}
+}
+
